@@ -55,7 +55,7 @@ MX = 16
 CW = W - 2 * MX
 
 d.text((MX, 8), "THE WORLD IN ONE DAY", font=SANS_B(13), fill=RED)
-right = "28 STORIES · 6 REGIONS · EVERY ONE DATED THURSDAY 19 NOVEMBER 2026"
+right = "30 STORIES · 6 REGIONS · EVERY ONE DATED THURSDAY 19 NOVEMBER 2026"
 d.text((W - MX - d.textlength(right, font=SANS_B(11)), 10),
        right, font=SANS_B(11), fill=INK)
 d.line([(MX, 30), (W - MX, 30)], fill=INK, width=2)
@@ -87,8 +87,8 @@ for i, (num, lab) in enumerate(stats):
 d.line([(MX, 200), (W - MX, 200)], fill=INK, width=1)
 
 regions = [("Europe 6", (43, 108, 176)), ("Asia 9", (192, 57, 43)),
-           ("Middle East 4", (150, 110, 40)), ("Africa 2", (39, 120, 70)),
-           ("Americas 1", (110, 60, 140)), ("Oceania 1", (30, 130, 140)),
+           ("Middle East 4", (150, 110, 40)), ("Africa 3", (39, 120, 70)),
+           ("Americas 1", (110, 60, 140)), ("Oceania 2", (30, 130, 140)),
            ("Global 5", (90, 88, 80))]
 rx, ry, rh = MX, 206, 20
 seg = CW // 7
@@ -137,18 +137,40 @@ def kerch(x, y, w, h):
 
 def hague(x, y, w, h):
     d.rectangle([x, y, x + w, y + h], fill=(232, 226, 208))
-    # courthouse
-    d.polygon([(x + 20, y + 14), (x + w // 2, y + 2), (x + w - 20, y + 14)], fill=NAVY)
-    for i in range(5):
-        bx = x + 40 + i * 48
-        d.rectangle([bx, y + 56, bx + 16, y + 96], fill=(120, 110, 90))
-    d.rectangle([x + 20, y + 96, x + w - 20, y + 104], fill=NAVY)
-    # scales of justice, centre front
-    cx, cy = x + w // 2, y + 118
-    d.line([(cx, cy - 14), (cx, cy + 22)], fill=INK, width=3)
-    d.line([(cx - 34, cy - 12), (cx + 34, cy - 12)], fill=INK, width=3)
-    d.polygon([(cx - 48, cy + 2), (cx - 20, cy + 2), (cx - 34, cy + 14)], fill=RED)
-    d.polygon([(cx + 20, cy + 2), (cx + 48, cy + 2), (cx + 34, cy + 14)], fill=RED)
+    cx = x + w // 2
+    # bigger courthouse: wide pediment, tall entablature, 6 tall columns
+    d.polygon([(x + 8, y + 18), (cx, y + 4), (x + w - 8, y + 18)], fill=NAVY)
+    d.rectangle([x + 8, y + 18, x + w - 8, y + 26], fill=NAVY)
+    for i in range(6):
+        bx = x + 22 + i * 48
+        d.rectangle([bx, y + 26, bx + 20, y + 96], fill=(120, 110, 90))
+        d.rectangle([bx - 2, y + 26, bx + 22, y + 31], fill=(90, 82, 66))
+    # base + steps
+    d.rectangle([x + 12, y + 96, x + w - 12, y + 104], fill=NAVY)
+    d.rectangle([x + 8, y + 104, x + w - 8, y + 108], fill=(150, 140, 120))
+    d.rectangle([x + 4, y + 108, x + w - 4, y + 112], fill=(150, 140, 120))
+    # larger scales of justice, in front of the columns
+    scx, scy = cx, y + 62
+    d.ellipse([scx - 3, scy - 16, scx + 3, scy - 10], fill=INK)
+    d.line([(scx, scy - 12), (scx, scy + 40)], fill=INK, width=4)
+    d.line([(scx - 44, scy - 10), (scx + 44, scy - 10)], fill=INK, width=4)
+    d.line([(scx - 44, scy - 10), (scx - 44, scy + 8)], fill=INK, width=2)
+    d.line([(scx + 44, scy - 10), (scx + 44, scy + 8)], fill=INK, width=2)
+    d.polygon([(scx - 58, scy + 8), (scx - 30, scy + 8), (scx - 44, scy + 22)], fill=RED)
+    d.polygon([(scx + 30, scy + 8), (scx + 58, scy + 8), (scx + 44, scy + 22)], fill=RED)
+    # "9-6" vote badge, top right
+    bx0, by0 = x + w - 46, y + 44
+    d.ellipse([bx0, by0, bx0 + 40, by0 + 40], fill=(255, 255, 255), outline=RED, width=3)
+    tv = d.textlength("9–6", font=SANS_B(17))
+    d.text((bx0 + 20 - tv / 2, by0 + 10), "9–6", font=SANS_B(17), fill=RED)
+    # small flags flanking the pediment
+    for fx, fcol in [(x + 16, (0, 120, 60)), (x + w - 30, (200, 16, 46))]:
+        d.line([(fx, y + 40), (fx, y + 72)], fill=INK, width=2)
+        d.polygon([(fx, y + 40), (fx + 16, y + 44), (fx, y + 48)], fill=fcol)
+    # small figures at the foot of the steps
+    for px in (x + 52, x + 78, x + w - 92, x + w - 66):
+        d.ellipse([px - 4, y + 113, px + 4, y + 120], fill=INK)
+        d.polygon([(px - 6, y + 120), (px + 6, y + 120), (px + 4, y + 127), (px - 4, y + 127)], fill=INK)
     d.rectangle([x + 8, y + 8, x + 108, y + 30], fill=RED)
     d.text((x + 13, y + 12), "THE HAGUE", font=SANS_B(15), fill=(255, 255, 255))
     d.rectangle([x + 8, y + 34, x + 150, y + 52], fill=(255, 255, 255))
@@ -201,90 +223,107 @@ SY = 516
 SCW = (CW - 4 * 8) // 5
 SH_IMG = 52
 
+BANNERS = {
+    "summit": "3-WAY SUMMIT",
+    "gta": "GTA VI LAUNCHES",
+    "euro": "EU €45BN LOAN",
+    "refinery": "REFINERIES HIT",
+    "mongolia": "PRESIDENT QUITS",
+    "gaza": "GAZA OP ENDS",
+    "yemen": "YEMEN WATER",
+    "markets": "MARKETS SLIDE",
+    "dhaka": "DHAKA UNREST",
+    "apec": "OPEN TRADE",
+}
+
 def icon_panel(x, y, w, h, kind):
     d.rectangle([x, y, x + w, y + h], fill=(232, 226, 208))
     d.rectangle([x, y, x + w, y + h], outline=INK, width=1)
-    cx, cy = x + w // 2, y + h // 2
-    if kind == "summit":  # three flags + handshake
-        d.rectangle([x + 14, y + 8, x + 58, y + h - 8], fill=(200, 16, 46))
-        d.rectangle([x + 14, y + h // 2 - 4, x + 58, y + h // 2 + 4], fill=(255, 255, 255))
-        d.rectangle([x + 66, y + 8, x + 110, y + h - 8], fill=(222, 0, 0))
-        for sy_ in (0, 1, 2, 3, 4):
-            d.rectangle([x + 66, y + 8 + sy_ * 8, x + 110, y + 12 + sy_ * 8], fill=(255, 255, 255) if sy_ % 2 else (222, 0, 0))
-        d.rectangle([x + 118, y + 8, x + 162, y + h - 8], fill=(255, 255, 255))
-        d.rectangle([x + 118, y + h // 2 - 4, x + 162, y + h // 2 + 4], fill=(0, 51, 153))
-        d.rectangle([x + 136, y + 8, x + 144, y + h - 8], fill=(0, 51, 153))
-        d.text((x + 164, y + 18), "3-WAY", font=SANS_B(9), fill=INK)
+    # bold in-icon title banner (red strip, top of panel)
+    d.rectangle([x, y, x + w, y + 19], fill=RED)
+    bt = BANNERS[kind]
+    fs = 13
+    while fs > 10 and d.textlength(bt, font=SANS_B(fs)) > w - 10:
+        fs -= 1
+    twb = d.textlength(bt, font=SANS_B(fs))
+    d.text((x + (w - twb) / 2, y + 3), bt, font=SANS_B(fs), fill=(255, 255, 255))
+    # icon art lives in the 33 px zone below the banner
+    iy = y + 19
+    cx = x + w // 2
+    if kind == "summit":  # three flags
+        d.rectangle([x + 10, iy + 4, x + 56, iy + 30], fill=(200, 16, 46))
+        d.rectangle([x + 10, iy + 15, x + 56, iy + 19], fill=(255, 255, 255))
+        for sy_ in range(5):
+            d.rectangle([x + 72, iy + 4 + sy_ * 5, x + 118, iy + 9 + sy_ * 5],
+                        fill=(255, 255, 255) if sy_ % 2 else (222, 0, 0))
+        d.rectangle([x + 134, iy + 4, x + 180, iy + 12], fill=(255, 255, 255))
+        d.rectangle([x + 134, iy + 12, x + 180, iy + 21], fill=(0, 51, 153))
+        d.rectangle([x + 134, iy + 21, x + 180, iy + 30], fill=(200, 16, 46))
     elif kind == "gta":  # game controller
-        d.rectangle([x + 40, cy - 16, x + 150, cy + 14], fill=(30, 30, 30))
-        d.ellipse([x + 30, cy - 6, x + 56, cy + 20], fill=(30, 30, 30))
-        d.ellipse([x + 134, cy - 6, x + 160, cy + 20], fill=(30, 30, 30))
-        d.rectangle([x + 56, cy - 8, x + 64, cy + 8], fill=(255, 255, 255))
-        d.rectangle([x + 52, cy - 4, x + 68, cy + 4], fill=(255, 255, 255))
-        for bx, by in [(118, cy - 8), (130, cy - 2), (118, cy + 2), (130, cy - 8)]:
-            d.ellipse([x + bx, y + by, x + bx + 7, y + by + 7], fill=(255, 200, 0))
-        d.text((x + 10, y + 4), "VI", font=SANS_B(14), fill=RED)
-    elif kind == "euro":  # euro coin
-        d.ellipse([x + 30, y + 6, x + 84, y + h - 6], fill=(255, 204, 0))
-        d.text((x + 44, y + 12), "€", font=SANS_B(26), fill=INK)
-        for i, bh in enumerate((10, 18, 26, 34)):
-            bx = x + 100 + i * 20
-            d.rectangle([bx, y + h - 8 - bh, bx + 14, y + h - 8], fill=BLUE)
-        d.text((x + 100, y + 6), "45bn", font=SANS_B(13), fill=INK)
+        d.rectangle([x + 52, iy + 8, x + 140, iy + 26], fill=(30, 30, 30))
+        d.ellipse([x + 44, iy + 18, x + 62, iy + 32], fill=(30, 30, 30))
+        d.ellipse([x + 130, iy + 18, x + 148, iy + 32], fill=(30, 30, 30))
+        d.rectangle([x + 60, iy + 12, x + 68, iy + 24], fill=(255, 255, 255))
+        d.rectangle([x + 56, iy + 16, x + 72, iy + 20], fill=(255, 255, 255))
+        for bx, by in [(118, iy + 10), (128, iy + 16), (118, iy + 20)]:
+            d.ellipse([x + bx, by, x + bx + 7, by + 7], fill=(255, 200, 0))
+    elif kind == "euro":  # euro coin + rising bars
+        d.ellipse([x + 28, iy + 4, x + 76, iy + 30], fill=(255, 204, 0))
+        d.text((x + 42, iy + 7), "€", font=SANS_B(20), fill=INK)
+        for i, bh in enumerate((8, 14, 20, 26)):
+            bx = x + 92 + i * 20
+            d.rectangle([bx, iy + 30 - bh, bx + 14, iy + 30], fill=BLUE)
     elif kind == "refinery":  # refinery towers + flame
-        for bx, bw in [(30, 18), (60, 24), (94, 16)]:
-            d.rectangle([x + bx, y + 12, x + bx + bw, y + h - 8], fill=(90, 90, 90))
-            d.polygon([(x + bx - 4, y + h - 24), (x + bx + bw // 2, y + h - 38),
-                       (x + bx + bw + 4, y + h - 24)], fill=(255, 140, 0))
-        d.line([(x + 130, y + 10), (x + 170, y + 30)], fill=(120, 120, 120), width=4)
-        d.text((x + 128, y + 32), "x2", font=SANS_B(16), fill=RED)
+        for bx, bw, top in [(30, 18, 8), (58, 24, 6), (90, 16, 10)]:
+            d.rectangle([x + bx, iy + top, x + bx + bw, iy + 30], fill=(90, 90, 90))
+            d.polygon([(x + bx - 2, iy + top), (x + bx + bw // 2, iy + top - 6),
+                       (x + bx + bw + 2, iy + top)], fill=(255, 140, 0))
+        d.line([(x + 128, iy + 8), (x + 168, iy + 26)], fill=(120, 120, 120), width=4)
+        d.text((x + 126, iy + 26), "x2", font=SANS_B(12), fill=RED)
     elif kind == "mongolia":  # parliament building
-        d.polygon([(x + 20, y + 10), (cx, y + 2), (x + w - 20, y + 10)], fill=INK)
+        d.polygon([(x + 20, iy + 10), (cx, iy + 2), (x + w - 20, iy + 10)], fill=INK)
         for i in range(4):
             bx = x + 34 + i * 40
-            d.rectangle([bx, y + 14, bx + 14, y + h - 10], fill=(120, 110, 90))
-        d.rectangle([x + 20, y + h - 10, x + w - 20, y + h - 4], fill=INK)
-        d.text((x + 118, y + 6), "VOTE", font=SANS_B(10), fill=RED)
+            d.rectangle([bx, iy + 12, bx + 14, iy + 30], fill=(120, 110, 90))
+        d.rectangle([x + 20, iy + 30, x + w - 20, iy + 32], fill=INK)
     elif kind == "gaza":  # aid boxes + cross
-        for bx, by in [(24, 14), (84, 14), (54, 28)]:
-            d.rectangle([x + bx, y + by, x + bx + 44, y + by + 20], fill=(200, 170, 120))
-            d.rectangle([x + bx + 18, y + by + 4, x + bx + 26, y + by + 16], fill=RED)
-            d.rectangle([x + bx + 14, y + by + 8, x + bx + 30, y + by + 12], fill=RED)
-        d.text((x + 130, y + 6), "4/26", font=SANS_B(14), fill=RED)
+        for bx, by in [(24, 6), (84, 6), (54, 20)]:
+            d.rectangle([x + bx, iy + by, x + bx + 44, iy + by + 12], fill=(200, 170, 120))
+            d.rectangle([x + bx + 18, iy + by + 2, x + bx + 26, iy + by + 10], fill=RED)
+            d.rectangle([x + bx + 14, iy + by + 4, x + bx + 30, iy + by + 8], fill=RED)
+        d.text((x + 140, iy + 8), "4/26", font=SANS_B(13), fill=RED)
     elif kind == "yemen":  # water drop + tap
-        d.polygon([(cx, y + 4), (cx - 16, y + 30), (cx + 16, y + 30)], fill=BLUE)
-        d.ellipse([cx - 16, y + 22, cx + 16, y + 46], fill=BLUE)
-        d.rectangle([x + 20, y + 8, x + 60, y + 16], fill=(120, 120, 120))
-        d.text((x + 130, y + 8), "HALVED", font=SANS_B(12), fill=INK)
-        d.text((x + 130, y + 26), "800k cut off", font=SANS(10), fill=INK)
+        d.polygon([(x + 46, iy + 2), (x + 32, iy + 20), (x + 60, iy + 20)], fill=BLUE)
+        d.ellipse([x + 32, iy + 14, x + 60, iy + 30], fill=BLUE)
+        d.rectangle([x + 90, iy + 8, x + 130, iy + 14], fill=(120, 120, 120))
+        d.text((x + 136, iy + 6), "HALVED", font=SANS_B(11), fill=INK)
+        d.text((x + 136, iy + 20), "800k cut off", font=SANS(9), fill=INK)
     elif kind == "markets":  # falling chart
-        pts = [(x + 14, y + 12), (x + 44, y + 20), (x + 70, y + 16), (x + 96, y + 30),
-               (x + 122, y + 38), (x + 150, y + 34), (x + 172, y + 44)]
+        pts = [(x + 12, iy + 8), (x + 44, iy + 14), (x + 70, iy + 11), (x + 96, iy + 20),
+               (x + 122, iy + 26), (x + 150, iy + 22), (x + 176, iy + 30)]
         for i in range(len(pts) - 1):
             d.line([pts[i], pts[i + 1]], fill=RED, width=3)
-        d.text((x + 12, y + h - 16), "S&P −2.02%", font=SANS_B(11), fill=RED)
     elif kind == "dhaka":  # burning building
-        d.rectangle([x + 40, y + 12, x + 120, y + h - 6], fill=(150, 140, 120))
-        for wy in (20, 34):
-            for wx in (52, 76, 100):
-                d.rectangle([x + wx, y + wy, x + wx + 12, y + wy + 8], fill=(255, 220, 130))
-        d.polygon([(x + 70, y + 12), (x + 80, y - 2), (x + 90, y + 12)], fill=(255, 140, 0))
-        d.ellipse([x + 130, y + 6, x + 160, y + 26], fill=(255, 140, 0))
-    elif kind == "apec":  # globe + trade arrows
-        d.ellipse([x + 14, cy - 18, x + 50, cy + 18], fill=BLUE)
-        d.ellipse([x + 22, cy - 10, x + 34, cy + 2], fill=(80, 180, 90))
-        d.ellipse([x + 34, cy + 4, x + 46, cy + 14], fill=(80, 180, 90))
-        d.line([(x + 70, cy), (x + 160, cy)], fill=INK, width=3)
-        d.polygon([(x + 160, cy - 6), (x + 176, cy), (x + 160, cy + 6)], fill=INK)
-        d.text((x + 70, cy - 20), "OPEN TRADE", font=SANS_B(12), fill=INK)
+        d.rectangle([x + 44, iy + 6, x + 124, iy + 32], fill=(150, 140, 120))
+        for wy in (14, 24):
+            for wx in (54, 76, 98):
+                d.rectangle([x + wx, iy + wy, x + wx + 12, iy + wy + 6], fill=(255, 220, 130))
+        d.polygon([(x + 76, iy + 6), (x + 84, iy + 0), (x + 92, iy + 6)], fill=(255, 140, 0))
+        d.ellipse([x + 134, iy + 4, x + 160, iy + 20], fill=(255, 140, 0))
+    elif kind == "apec":  # globe + trade arrow
+        d.ellipse([x + 16, iy + 6, x + 54, iy + 30], fill=BLUE)
+        d.ellipse([x + 24, iy + 12, x + 36, iy + 20], fill=(80, 180, 90))
+        d.ellipse([x + 36, iy + 20, x + 48, iy + 28], fill=(80, 180, 90))
+        d.line([(x + 72, iy + 18), (x + 168, iy + 18)], fill=INK, width=3)
+        d.polygon([(x + 168, iy + 12), (x + 182, iy + 18), (x + 168, iy + 24)], fill=INK)
 
 smalls = [
     ("4", "SHENZHEN · SUMMIT", "Trump, Xi and Putin meet three-way",
-     "First-ever three-way summit, ~70 min at APEC sidelines. Four-point "
-     "\"Declaration toward Peace\"; no mention of Ukraine or Iran. (Reuters, AP)", "summit"),
+     "First-ever three-way summit, ~70 min at APEC. Peace declaration; "
+     "no Ukraine or Iran mention. (Reuters, AP)", "summit"),
     ("5", "WORLDWIDE · GAMES", "GTA VI launches on Thursday",
-     "Sensor Tower puts revenue at $1.84bn by release day, 19.05m units. "
-     "First reviews 99/100 on Metacritic; 2.3m watching on Twitch. (CNN, Le Monde)", "gta"),
+     "$1.84bn revenue, 19.05m units by release day. Reviews 99/100; "
+     "2.3m watching. (CNN, Le Monde)", "gta"),
     ("6", "BRUSSELS · EUROPE", "EU proposes a €45bn loan for Ukraine",
      "The loan would fund Kyiv from the 2027 budget. (Reuters)", "euro"),
     ("7", "UKRAINE · WAR", "Ukraine strikes two Russian oil refineries",
@@ -298,8 +337,8 @@ smalls = [
     ("10", "TAIZ, YEMEN · AID", "Taiz water output nearly halved",
      "More than 800,000 people are cut off from aid, UNICEF says. (UNICEF)", "yemen"),
     ("11", "MARKETS · THURSDAY", "Thursday's closes: Asia falls, US slides",
-     "TAIEX −3.24% to 38,891.68; Hang Seng −1.89%; Nikkei +0.72%. S&P 500 "
-     "−2.02%, its 6th straight loss; Nasdaq −2.25%; Dow −2.19%.", "markets"),
+     "TAIEX −3.24%; Hang Seng −1.89%; Nikkei +0.72%. S&P 500 "
+     "−2.02%, its 6th straight loss; Nasdaq −2.25%.", "markets"),
     ("12", "DHAKA · UNREST", "Bangladesh unrest: 4 killed",
      "Muhammad Yunus's ancestral home is set ablaze as unrest spreads. (AP)", "dhaka"),
     ("13", "SHENZHEN · APEC", "Xi: Asia-Pacific must adopt open trade",
@@ -319,7 +358,7 @@ for idx, (num, place, head, body, kind) in enumerate(smalls):
 # ---------- BOTTOM: map + briefs ----------
 BY = 806
 d.text((MX, BY), "WHERE IT HAPPENED", font=SANS_B(12), fill=INK)
-d.text((MX + 312, BY), "ALSO ON THURSDAY 19 NOVEMBER — 15 MORE STORIES",
+d.text((MX + 312, BY), "ALSO ON THURSDAY 19 NOVEMBER — 17 MORE STORIES",
        font=SANS_B(12), fill=INK)
 d.line([(MX, BY + 17), (W - MX, BY + 17)], fill=INK, width=1)
 
@@ -338,9 +377,9 @@ d.polygon([(mx0 + 190, my0 + 18), (mx0 + 268, my0 + 10), (mx0 + 288, my0 + 34),
            (mx0 + 272, my0 + 62), (mx0 + 226, my0 + 66), (mx0 + 200, my0 + 44)], fill=TAN)
 d.polygon([(mx0 + 252, my0 + 88), (mx0 + 284, my0 + 84), (mx0 + 288, my0 + 102),
            (mx0 + 258, my0 + 106)], fill=TAN)
-pins = {1: (156, 36), 2: (150, 30), 3: (88, 38), 4: (252, 52), 5: (52, 56),
-        6: (150, 30), 7: (186, 36), 8: (246, 34), 9: (196, 52), 10: (196, 58),
-        11: (140, 40), 12: (238, 58), 13: (252, 52)}
+pins = {1: (176, 36), 2: (136, 22), 3: (88, 38), 4: (262, 44), 5: (52, 56),
+        6: (154, 34), 7: (190, 26), 8: (244, 28), 9: (184, 50), 10: (196, 64),
+        11: (128, 44), 12: (224, 58), 13: (242, 64)}
 for n, (px, py) in pins.items():
     d.ellipse([mx0 + px - 7, my0 + py - 7, mx0 + px + 7, my0 + py + 7],
               fill=RED, outline=(255, 255, 255), width=1)
@@ -366,15 +405,17 @@ briefs = [
     "26 Uganda — Bududa case at the UN Human Rights Committee",
     "27 Africa — Ethiopia and Eritrea mass troops at the border",
     "28 Antalya — COP31 talks grind into their final stretch",
+    "29 Tonga — Tonga declares drought emergency (Reuters, RNZ)",
+    "30 Senegal — Migrant boat sinks off Senegal (Reuters, AP)",
 ]
-assert len(briefs) == 15, len(briefs)
+assert len(briefs) == 17, len(briefs)
 bx0, by0 = MX + 312, BY + 24
 bcolw = (W - MX - bx0 - 8) // 2
 for i, b in enumerate(briefs):
-    col, row = divmod(i, 8)
+    col, row = divmod(i, 10)
     x = bx0 + col * (bcolw + 8)
     y = by0 + row * 11
-    d.text((x, y), b, font=SANS(9), fill=INK)
+    d.text((x, y), b, font=SANS(8), fill=INK)
 
 # ---------- DATE CHECK ----------
 dy = 952
